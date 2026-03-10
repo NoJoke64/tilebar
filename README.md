@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tilebar
 
-## Getting Started
+MVP for a Splitwise-style web app.
 
-First, run the development server:
+## Setup
+
+1. Create a Firebase project and enable Google sign-in.
+2. Create a Firestore database in test mode (for MVP).
+3. Copy the Firebase web config into `.env.local`.
+4. Run the app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Auth
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Google sign-in via Firebase Auth.
+- Popup first with redirect fallback for popup-blocked browsers.
+- Auth state is exposed via `AuthProvider` and `useAuth()`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Groups
 
-## Learn More
+- Create groups from the dashboard.
+- Join groups via invite link `/join/{groupId}`.
+- Groups are stored in the `groups` collection with `memberUids` + `members`.
 
-To learn more about Next.js, take a look at the following resources:
+## Expenses
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Add expenses inside a group.
+- Stored in the `expenses` collection with `groupId`, `amount`, `title`, `description`, `payerUids`, `participantUids`, `split`, `createdAt`.
+- Split is equal across selected participants for MVP.
+- Multiple payers are supported (amount split evenly among selected payers for now).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Balances
 
-## Deploy on Vercel
+- Group page shows net balances per member (paid minus share).
+- Calculated from stored expenses and split data.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Stage 2 additions
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Real-time updates for groups, expenses, and settlements.
+- Debt simplification suggestions plus settlement recording.
+- Firestore security rules in `firestore.rules`.
+
+To deploy rules with Firebase CLI:
+
+```bash
+firebase deploy --only firestore:rules
+```
+
+## Account settings
+
+- Update display name.
+
+## Stage 3 (receipt scanning)
+
+- Upload a receipt image and parse it via Gemini.
+- Parsed line items are editable before saving as an expense.
+- Configure server-side Gemini access:
+
+```
+GEMINI_API_KEY=your_key_here
+GEMINI_MODEL=gemini-2.5-flash
+GEMINI_API_BASE=https://generativelanguage.googleapis.com/v1beta/models
+```

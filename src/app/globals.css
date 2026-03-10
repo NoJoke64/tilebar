@@ -10,6 +10,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-brand: var(--font-brand);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +24,60 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.font-brand {
+  font-family: var(--font-brand), sans-serif;
+  letter-spacing: 0.02em;
+}
+
+button,
+a,
+[role="button"] {
+  cursor: pointer;
+}
+
+.checkbox-tilebar {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-grid;
+  place-content: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  border: 2px solid rgba(20, 184, 166, 0.6);
+  background: #ffffff;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.checkbox-tilebar:checked {
+  background: #14b8a6;
+  border-color: #14b8a6;
+}
+
+.checkbox-tilebar:checked::after {
+  content: "";
+  width: 0.35rem;
+  height: 0.65rem;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  transform: translateY(-0.02rem) rotate(45deg);
+}
+
+.checkbox-tilebar:hover {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.checkbox-tilebar:checked:hover {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+.checkbox-tilebar:focus-visible {
+  outline: 2px solid rgba(16, 185, 129, 0.4);
+  outline-offset: 2px;
 }
