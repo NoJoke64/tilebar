@@ -130,16 +130,12 @@ export async function fetchLatestExpenseForGroup(groupId: string): Promise<Expen
 
   let latestDoc = snapshot.docs[0];
   let latestTime =
-    (latestDoc.data().createdAt as Timestamp | undefined)?.toMillis?.() ??
-    latestDoc.updateTime?.toMillis?.() ??
-    0;
+    (latestDoc.data().createdAt as Timestamp | undefined)?.toMillis?.() ?? 0;
 
   snapshot.docs.forEach((docSnap) => {
     const data = docSnap.data();
     const time =
-      (data.createdAt as Timestamp | undefined)?.toMillis?.() ??
-      docSnap.updateTime?.toMillis?.() ??
-      0;
+      (data.createdAt as Timestamp | undefined)?.toMillis?.() ?? 0;
     if (time > latestTime) {
       latestDoc = docSnap;
       latestTime = time;
